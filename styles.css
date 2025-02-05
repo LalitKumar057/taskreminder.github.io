@@ -1,8 +1,8 @@
-/* Body styling */
+/* Global styles */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f8ff;
-    background-image: url('https://images.unsplash.com/photo-1556740738-b6c2d5d16f00'); /* Background of a working environment */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f4f6;
+    background-image: url('https://images.unsplash.com/photo-1560264411-380f5acb5055'); /* Replace with work-related background */
     background-size: cover;
     background-position: center;
     display: flex;
@@ -11,61 +11,62 @@ body {
     height: 100vh;
     margin: 0;
     color: #333;
+    text-align: center;
 }
 
-/* Container for form and tasks */
+/* Container for task list */
 .container {
-    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+    background-color: rgba(255, 255, 255, 0.9); /* White background with some transparency */
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 320px;
-    text-align: center;
-    backdrop-filter: blur(8px); /* Adding a blur effect to the background */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    max-width: 100%;
 }
 
-/* Title styling */
+/* Header style */
 h1 {
     margin-bottom: 20px;
-    color: #2c3e50;
-    font-size: 24px;
+    font-size: 30px;
+    color: #333;
     font-weight: bold;
 }
 
-/* Form styling */
+/* Form container for adding tasks */
 form {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-/* Label styling */
+/* Labels for input fields */
 label {
     margin-top: 10px;
-    text-align: left;
-    font-weight: bold;
+    font-weight: 600;
     color: #555;
+    text-align: left;
 }
 
-/* Input fields */
+/* Input fields for task description and date */
 input[type="text"], input[type="datetime-local"] {
     padding: 12px;
     margin: 8px 0;
     border-radius: 6px;
-    border: 1px solid #ddd;
-    font-size: 14px;
-    transition: all 0.3s ease;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
 }
 
+/* Focus effect for input fields */
 input[type="text"]:focus, input[type="datetime-local"]:focus {
-    border-color: #28a745;
+    border-color: #0078d4; /* Microsoft blue */
     outline: none;
 }
 
-/* Button styling */
+/* Submit button for adding tasks */
 button {
     padding: 12px;
-    background-color: #28a745;
+    background-color: #0078d4; /* Microsoft Blue */
     color: white;
     border: none;
     border-radius: 6px;
@@ -74,57 +75,63 @@ button {
     transition: background-color 0.3s ease;
 }
 
+/* Hover effect for the button */
 button:hover {
-    background-color: #218838;
+    background-color: #005a9e;
 }
 
-/* Task list styling */
+/* List of tasks */
 ul {
     list-style: none;
     padding: 0;
     margin-top: 20px;
 }
 
-/* Task item styling */
+/* Individual task item style */
 li {
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     padding: 12px;
     margin: 8px 0;
-    border-radius: 6px;
-    text-align: left;
-    font-size: 14px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
 }
 
-/* Hover effect for tasks */
+/* Task hover effect */
 li:hover {
-    background-color: #e2e6ea;
+    background-color: #f0f1f3;
 }
 
 /* Completed task styling */
 li.completed {
-    background-color: #d4edda;
+    background-color: #d4edda; /* Light green for completed tasks */
     text-decoration: line-through;
     color: #6c757d;
 }
 
-/* Add icons to the form, like a clock for deadlines */
-input[type="datetime-local"]:before {
-    content: url('https://img.icons8.com/ios/50/000000/clock.png');
-    padding-right: 10px;
-    vertical-align: middle;
+/* Delete button styling (trash icon) */
+button.delete {
+    background-color: transparent;
+    color: #e74c3c;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
 }
 
-/* Create a footer or a call to action for the task reminder page */
+/* Add a footer section for copyright or additional links */
 footer {
     margin-top: 20px;
-    font-size: 12px;
+    font-size: 14px;
     color: #777;
 }
 
 footer a {
+    color: #0078d4;
     text-decoration: none;
-    color: #28a745;
     font-weight: bold;
 }
 
