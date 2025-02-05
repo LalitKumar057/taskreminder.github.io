@@ -1,70 +1,133 @@
+/* Body styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff;
+    background-image: url('https://images.unsplash.com/photo-1556740738-b6c2d5d16f00'); /* Background of a working environment */
+    background-size: cover;
+    background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    color: #333;
 }
 
+/* Container for form and tasks */
 .container {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 320px;
     text-align: center;
+    backdrop-filter: blur(8px); /* Adding a blur effect to the background */
 }
 
+/* Title styling */
 h1 {
     margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: bold;
 }
 
+/* Form styling */
 form {
     display: flex;
     flex-direction: column;
+    gap: 12px;
 }
 
+/* Label styling */
 label {
     margin-top: 10px;
     text-align: left;
+    font-weight: bold;
+    color: #555;
 }
 
+/* Input fields */
 input[type="text"], input[type="datetime-local"] {
-    padding: 8px;
-    margin: 10px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
+input[type="text"]:focus, input[type="datetime-local"]:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+/* Button styling */
 button {
-    padding: 10px;
+    padding: 12px;
     background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #218838;
 }
 
+/* Task list styling */
 ul {
     list-style: none;
     padding: 0;
+    margin-top: 20px;
 }
 
+/* Task item styling */
 li {
-    background-color: #f1f1f1;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
+    background-color: #f9f9f9;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 6px;
     text-align: left;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
+/* Hover effect for tasks */
+li:hover {
+    background-color: #e2e6ea;
+}
+
+/* Completed task styling */
 li.completed {
     background-color: #d4edda;
     text-decoration: line-through;
+    color: #6c757d;
+}
+
+/* Add icons to the form, like a clock for deadlines */
+input[type="datetime-local"]:before {
+    content: url('https://img.icons8.com/ios/50/000000/clock.png');
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+/* Create a footer or a call to action for the task reminder page */
+footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #777;
+}
+
+footer a {
+    text-decoration: none;
+    color: #28a745;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
