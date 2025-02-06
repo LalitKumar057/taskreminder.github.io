@@ -34,19 +34,19 @@ function addTaskToList(task) {
     
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
-    li.innerHTML = `
+    li.innerHTML = 
         <span>${task.description}</span>
         <br>
         <small>Due: ${task.dueDate.toLocaleString()}</small>
         <button onclick="markAsComplete(${task.id})">Mark as Complete</button>
-    `;
+    ;
     
     taskList.appendChild(li);
 }
 
 function markAsComplete(taskId) {
     const taskList = document.getElementById('taskList');
-    const taskItem = taskList.querySelector(`[data-id="${taskId}"]`);
+    const taskItem = taskList.querySelector([data-id="${taskId}"]);
     taskItem.classList.add('completed');
     taskItem.querySelector('button').disabled = true;
 }
@@ -70,8 +70,8 @@ function setReminder(task) {
 function scheduleNotification(task) {
     // Immediate notification for testing (1 second after task creation)
     setTimeout(function () {
-        new Notification(`Task Reminder: "${task.description}"`, {
-            body: `Due: ${task.dueDate.toLocaleString()}`,
+        new Notification(Task Reminder: "${task.description}", {
+            body: Due: ${task.dueDate.toLocaleString()},
             icon: 'https://via.placeholder.com/50' // Optional: Use an icon
         });
     }, 1000); // Test notification after 1 second
@@ -82,8 +82,8 @@ function scheduleNotification(task) {
     // If reminder time is in the future
     if (reminderTime > 0) {
         setTimeout(function () {
-            new Notification(`Reminder: Your task "${task.description}" is due soon!`, {
-                body: `Due at: ${task.dueDate.toLocaleString()}`,
+            new Notification(Reminder: Your task "${task.description}" is due soon!, {
+                body: Due at: ${task.dueDate.toLocaleString()},
                 icon: 'https://via.placeholder.com/50' // Optional: Use an icon
             });
         }, reminderTime);
