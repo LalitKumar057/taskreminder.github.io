@@ -1,12 +1,4 @@
 function scheduleNotification(task) {
-    // Test notification for immediate feedback (1 second after task creation)
-    setTimeout(function () {
-        new Notification(`Task Reminder: "${task.description}"`, {
-            body: `Due: ${task.dueDate.toLocaleString()}`,
-            icon: 'https://via.placeholder.com/50'
-        });
-    }, 1000); // Test notification after 1 second
-
     // Real reminder logic: Notify the user based on the chosen reminder time
     const reminderTime = task.dueDate.getTime() - Date.now() - task.reminderTime;
 
