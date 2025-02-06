@@ -1,7 +1,7 @@
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // Get task description and due date
+    // Get task and due date
     const taskInput = document.getElementById('task');
     const dueDateInput = document.getElementById('dueDate');
     
@@ -32,18 +32,15 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
 function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
     
-    // Create a new list item
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
-
-    // Insert task description and due date
     li.innerHTML = `
-        <span>${task.description}</span><br>
-        <small>Due: ${task.dueDate.toLocaleString()}</small><br>
+        <span>${task.description}</span>
+        <br>
+        <small>Due: ${task.dueDate.toLocaleString()}</small>
         <button onclick="markAsComplete(${task.id})">Mark as Complete</button>
     `;
-
-    // Append the task item to the task list
+    
     taskList.appendChild(li);
 }
 
@@ -59,37 +56,36 @@ function setReminder(task) {
     if (Notification.permission !== "granted") {
         Notification.requestPermission().then(permission => {
             if (permission === "granted") {
+                // Notify if permission is granted
                 scheduleNotification(task);
             }
         });
     } else {
+        // If permission is already granted
         scheduleNotification(task);
     }
 }
 
 // Function to handle notification logic
 function scheduleNotification(task) {
-    // Calculate reminder time: 5 minutes before due time
-    const reminderTime = task.dueDate.getTime() - Date.now() - 5 * 60 * 1000;
+    // Immediate notification for testing (1 second after task creation)
+    setTimeout(function () {
+        new Notification(`Task Reminder: "${task.description}"`, {
+            body: `Due: ${task.dueDate.toLocaleString()}`,
+            icon: 'https://via.placeholder.com/50' // Optional: Use an icon
+        });
+    }, 1000); // Test notification after 1 second
 
+    // Real reminder logic: Notify 5 minutes before the due time
+    const reminderTime = task.dueDate.getTime() - Date.now() - 5 * 60 * 1000; // 5 minutes before due time
+
+    // If reminder time is in the future
     if (reminderTime > 0) {
-        // Set a timeout to show reminder 5 minutes before due time
         setTimeout(function () {
             new Notification(`Reminder: Your task "${task.description}" is due soon!`, {
                 body: `Due at: ${task.dueDate.toLocaleString()}`,
-                icon: 'https://via.placeholder.com/50'
+                icon: 'https://via.placeholder.com/50' // Optional: Use an icon
             });
         }, reminderTime);
-    }
-
-    // If the task is overdue, notify immediately
-    const overdueTime = task.dueDate.getTime() - Date.now();
-    if (overdueTime < 0) {
-        setTimeout(function () {
-            new Notification(`Task Overdue: "${task.description}"`, {
-                body: `The task was due at: ${task.dueDate.toLocaleString()}. Please complete it ASAP.`,
-                icon: 'https://via.placeholder.com/50'
-            });
-        }, 0);  // Send overdue notification immediately
     }
 }
