@@ -1,10 +1,10 @@
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // Get task description and due date
+    // Get task and due date
     const taskInput = document.getElementById('task');
     const dueDateInput = document.getElementById('dueDate');
-
+    
     const taskDescription = taskInput.value;
     const dueDate = new Date(dueDateInput.value);
 
@@ -19,10 +19,10 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
 
         // Add task to the list
         addTaskToList(task);
-
-        // Schedule notification
+        
+        // Set notification for exact due time
         scheduleNotification(task);
-
+        
         // Clear input fields
         taskInput.value = '';
         dueDateInput.value = '';
@@ -31,7 +31,7 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
 
 function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
-
+    
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
     li.innerHTML = `
@@ -40,7 +40,7 @@ function addTaskToList(task) {
         <small class="task-time">Due: ${task.dueDate.toLocaleString()}</small>
         <button onclick="markAsComplete(${task.id})">Mark as Complete</button>
     `;
-
+    
     taskList.appendChild(li);
 }
 
@@ -51,13 +51,15 @@ function markAsComplete(taskId) {
         taskItem.classList.add('completed');
         taskItem.querySelector('button').disabled = true;
 
-        // Save completion status
-        localStorage.setItem(`task-${taskId}-completed`, "true");
+        // Store completion status
+        completedTasks.add(taskId);
     }
 }
 
+// Set to track completed tasks
+const completedTasks = new Set();
+
 function scheduleNotification(task) {
-    // Request notification permission if not granted
     if (Notification.permission !== "granted") {
         Notification.requestPermission().then(permission => {
             if (permission === "granted") {
@@ -71,26 +73,22 @@ function scheduleNotification(task) {
 
 function setDueTimeNotification(task) {
     const timeUntilDue = task.dueDate.getTime() - Date.now();
-
+    
     if (timeUntilDue > 0) {
         setTimeout(() => {
-            // Check if task is already completed
-            const isCompleted = localStorage.getItem(`task-${task.id}-completed`);
-            if (!isCompleted) {
-                // Show notification
+            if (!completedTasks.has(task.id)) { // Check if task is completed
+                playNotificationSound();
                 new Notification("Task Reminder", {
                     body: `Your task "${task.description}" is now due!`,
                     icon: 'https://via.placeholder.com/50'
                 });
-
-                // Play notification sound
-                playNotificationSound();
             }
         }, timeUntilDue);
     }
 }
 
+// Function to play notification sound
 function playNotificationSound() {
-    const audio = new Audio('https://www.soundjay.com/button/beep-07.wav');
+    const audio = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Replace with your own sound file URL if needed
     audio.play();
 }
