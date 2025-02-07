@@ -1,10 +1,13 @@
+/* Import Google Font for time & date */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 /* Global styles - Background image applies to the whole page */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: url('https://images.unsplash.com/photo-1560264411-380f5acb5055'); /* Your background image */
+    background-image: url('https://images.unsplash.com/photo-1560264411-380f5acb5055');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed; /* Keeps background fixed while scrolling */
+    background-attachment: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,15 +17,15 @@ body {
     text-align: center;
 }
 
-/* Task container - White background to separate it from the background */
+/* Task container */
 .container {
-    background: rgba(255, 255, 255, 0.95); /* White with slight transparency */
+    background: rgba(255, 255, 255, 0.95);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     width: 350px;
     max-width: 90%;
-    backdrop-filter: blur(5px); /* Slight blur effect for a modern look */
+    backdrop-filter: blur(5px);
 }
 
 /* Header style */
@@ -33,14 +36,14 @@ h1 {
     font-weight: bold;
 }
 
-/* Form container for adding tasks */
+/* Form container */
 form {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-/* Labels for input fields */
+/* Labels */
 label {
     margin-top: 10px;
     font-weight: 600;
@@ -48,7 +51,7 @@ label {
     text-align: left;
 }
 
-/* Input fields for task description and date */
+/* Input fields */
 input[type="text"], input[type="datetime-local"] {
     padding: 12px;
     margin: 8px 0;
@@ -60,26 +63,34 @@ input[type="text"], input[type="datetime-local"] {
     background-color: #fff;
     color: #333;
     cursor: pointer;
-    appearance: none; /* Removes browser default styles */
+    appearance: none;
 }
 
-/* Hover effect for input fields */
+/* NEW - Change the font of date & time input */
+input[type="datetime-local"] {
+    font-family: 'Poppins', sans-serif; /* Stylish font */
+    font-size: 18px; /* Bigger text */
+    font-weight: 600; /* Bold for better visibility */
+    color: #0078d4; /* Microsoft blue */
+}
+
+/* Hover effect */
 input[type="text"]:hover, input[type="datetime-local"]:hover {
-    border-color: #0078d4; /* Microsoft blue */
+    border-color: #0078d4;
     background-color: #f8f9fa;
 }
 
-/* Focus effect for input fields */
+/* Focus effect */
 input[type="text"]:focus, input[type="datetime-local"]:focus {
     border-color: #005a9e;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 120, 212, 0.5);
 }
 
-/* Submit button for adding tasks */
+/* Submit button */
 button {
     padding: 12px;
-    background-color: #0078d4; /* Microsoft Blue */
+    background-color: #0078d4;
     color: white;
     border: none;
     border-radius: 6px;
@@ -89,20 +100,20 @@ button {
     width: 100%;
 }
 
-/* Hover effect for the button */
+/* Hover effect */
 button:hover {
     background-color: #005a9e;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* List of tasks */
+/* List */
 ul {
     list-style: none;
     padding: 0;
     margin-top: 20px;
 }
 
-/* Individual task item style */
+/* Task item */
 li {
     background-color: #ffffff;
     padding: 12px;
@@ -116,19 +127,19 @@ li {
     transition: background-color 0.3s ease;
 }
 
-/* Task hover effect */
+/* Task hover */
 li:hover {
     background-color: #f0f1f3;
 }
 
-/* Completed task styling */
+/* Completed task */
 li.completed {
-    background-color: #d4edda; /* Light green for completed tasks */
+    background-color: #d4edda;
     text-decoration: line-through;
     color: #6c757d;
 }
 
-/* Delete button styling (trash icon) */
+/* Delete button */
 button.delete {
     background-color: transparent;
     color: #e74c3c;
@@ -138,13 +149,13 @@ button.delete {
     transition: color 0.3s ease;
 }
 
-/* Delete button hover effect */
+/* Delete button hover */
 button.delete:hover {
     color: #c0392b;
     background-color: rgba(231, 76, 60, 0.1);
 }
 
-/* Add a footer section for copyright or additional links */
+/* Footer */
 footer {
     margin-top: 20px;
     font-size: 14px;
@@ -161,7 +172,7 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* Mobile Responsive Adjustments */
+/* Mobile Responsive */
 @media (max-width: 480px) {
     .container {
         width: 90vw;
