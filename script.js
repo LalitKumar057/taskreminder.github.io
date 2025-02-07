@@ -89,6 +89,14 @@ function setDueTimeNotification(task) {
 
 // Function to play notification sound
 function playNotificationSound() {
-    const audio = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Replace with your own sound file URL if needed
-    audio.play();
+    // Ensure user interaction allows sound
+    const audio = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Change URL if needed
+    
+    document.body.addEventListener('click', () => {
+        audio.play();
+    }, { once: true });
+
+    audio.play().catch(error => {
+        console.warn("Autoplay blocked, click anywhere to enable sound.");
+    });
 }
