@@ -1,7 +1,6 @@
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // Get task and due date
     const taskInput = document.getElementById('task');
     const dueDateInput = document.getElementById('dueDate');
     
@@ -9,7 +8,6 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
     const dueDate = new Date(dueDateInput.value);
 
     if (taskDescription && dueDate) {
-        // Create task object
         const task = {
             id: Date.now(),
             description: taskDescription,
@@ -17,13 +15,9 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
             completed: false
         };
 
-        // Add task to the list
         addTaskToList(task);
-        
-        // Set notification for exact due time
         scheduleNotification(task);
         
-        // Clear input fields
         taskInput.value = '';
         dueDateInput.value = '';
     }
@@ -56,27 +50,20 @@ function markAsComplete(taskId) {
     }
 }
 
-// Set to track completed tasks
+// Store completed tasks to prevent unnecessary alerts
 const completedTasks = new Set();
 
-function scheduleNotification(task) {
-    if (Notification.permission !== "granted") {
-        Notification.requestPermission().then(permission => {
-            if (permission === "granted") {
-                setDueTimeNotification(task);
-            }
-        });
-    } else {
-        setDueTimeNotification(task);
-    }
+// Request Notification Permission
+if (Notification.permission !== "granted") {
+    Notification.requestPermission();
 }
 
-function setDueTimeNotification(task) {
+function scheduleNotification(task) {
     const timeUntilDue = task.dueDate.getTime() - Date.now();
     
     if (timeUntilDue > 0) {
         setTimeout(() => {
-            if (!completedTasks.has(task.id)) { // Check if task is completed
+            if (!completedTasks.has(task.id)) { // Ensure notification for pending tasks only
                 playNotificationSound();
                 new Notification("Task Reminder", {
                     body: `Your task "${task.description}" is now due!`,
@@ -87,16 +74,19 @@ function setDueTimeNotification(task) {
     }
 }
 
-// Function to play notification sound
-function playNotificationSound() {
-    // Ensure user interaction allows sound
-    const audio = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Change URL if needed
-    
-    document.body.addEventListener('click', () => {
-        audio.play();
-    }, { once: true });
+// Ensuring Sound Works Even with Browser Restrictions
+let audio = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Replace with your sound file
 
+// Play sound when due
+function playNotificationSound() {
     audio.play().catch(error => {
-        console.warn("Autoplay blocked, click anywhere to enable sound.");
+        console.warn("Autoplay blocked! Click anywhere to allow sound.");
     });
 }
+
+// Enable sound on user interaction (browser workaround)
+document.addEventListener('click', () => {
+    audio.play().catch(() => {
+        console.warn("Click detected, but still blocked.");
+    });
+}, { once: true });
