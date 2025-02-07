@@ -25,6 +25,7 @@ body {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     width: 350px;
     max-width: 100%;
+    text-align: center; /* Fix alignment */
 }
 
 /* Header style */
@@ -40,6 +41,7 @@ form {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    align-items: center; /* Center inputs */
 }
 
 /* Labels for input fields */
@@ -48,52 +50,50 @@ label {
     font-weight: 600;
     color: #555;
     text-align: left;
+    width: 100%;
 }
 
-/* Input fields for task description */
-input[type="text"] {
+/* Input fields */
+input[type="text"], input[type="datetime-local"] {
     padding: 12px;
     margin: 8px 0;
     border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 16px;
     transition: border-color 0.3s ease;
+    width: 100%;
 }
 
 /* Style for date and time input */
 input[type="datetime-local"] {
-    font-family: 'Poppins', sans-serif; /* Stylish font */
-    font-size: 18px; /* Bigger text */
-    font-weight: 600; /* Bold */
-    color: #0078d4; /* Microsoft blue */
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000; /* Black text */
     background-color: #fff;
 }
 
-/* Focus effect for input fields */
+/* Focus effect */
 input[type="text"]:focus, input[type="datetime-local"]:focus {
-    border-color: #0078d4; /* Microsoft blue */
+    border-color: #0078d4;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 120, 212, 0.5);
-    background-color: #f8f9fa;
 }
 
-/* Submit button for adding tasks */
+/* Submit button */
 button {
     padding: 12px;
-    background-color: #0078d4; /* Microsoft Blue */
+    background-color: #0078d4;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+    width: 100%;
 }
 
-/* Hover effect for the button */
+/* Hover effect */
 button:hover {
     background-color: #005a9e;
 }
@@ -105,7 +105,7 @@ ul {
     margin-top: 20px;
 }
 
-/* Individual task item style */
+/* Task item */
 li {
     background-color: #ffffff;
     padding: 12px;
@@ -116,7 +116,6 @@ li {
     align-items: flex-start;
     font-size: 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
 }
 
 /* Task hover effect */
@@ -124,31 +123,22 @@ li:hover {
     background-color: #f0f1f3;
 }
 
-/* Completed task styling */
+/* Completed task */
 li.completed {
-    background-color: #d4edda; /* Light green for completed tasks */
+    background-color: #d4edda;
     text-decoration: line-through;
     color: #6c757d;
 }
 
-/* Delete button styling (trash icon) */
-button.delete {
-    background-color: transparent;
-    color: #e74c3c;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-/* Styling for due date text inside task list */
+/* Task due date text */
 small.task-time {
-    font-family: 'Poppins', sans-serif; /* Apply stylish font */
+    font-family: 'Poppins', sans-serif;
     font-size: 14px;
     font-weight: bold;
-    color: #555;
+    color: #000; /* Black text */
 }
 
-/* Footer section */
+/* Footer */
 footer {
     margin-top: 20px;
     font-size: 14px;
