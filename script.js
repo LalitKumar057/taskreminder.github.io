@@ -50,6 +50,9 @@ function markAsComplete(taskId) {
     if (taskItem) {
         taskItem.classList.add('completed');
         taskItem.querySelector('button').disabled = true;
+        
+        // Mark task as completed in local storage
+        localStorage.setItem(`task-${taskId}-completed`, "true");
     }
 }
 
@@ -74,10 +77,23 @@ function setDueTimeNotification(task) {
     // If due time is in the future
     if (timeUntilDue > 0) {
         setTimeout(() => {
-            new Notification("Task Reminder", {
-                body: `Your task "${task.description}" is now due!`,
-                icon: 'https://via.placeholder.com/50' // Optional: Use an icon
-            });
+            // Check if the task was marked as complete before sending notification
+            const isCompleted = localStorage.getItem(`task-${task.id}-completed`);
+            if (!isCompleted) {
+                new Notification("Task Reminder", {
+                    body: `Your task "${task.description}" is now due!`,
+                    icon: 'https://via.placeholder.com/50' // Optional: Use an icon
+                });
+
+                // Play notification sound
+                playNotificationSound();
+            }
         }, timeUntilDue);
     }
+}
+
+// Function to play a small notification sound
+function playNotificationSound() {
+    const audio = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Use any beep sound URL
+    audio.play();
 }
