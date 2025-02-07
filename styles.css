@@ -1,10 +1,10 @@
-/* Global styles */
+/* Global styles - Background image applies to the whole page */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f3f4f6;
-    background-image: url('https://images.unsplash.com/photo-1560264411-380f5acb5055'); /* Replace with work-related background */
+    background-image: url('https://images.unsplash.com/photo-1560264411-380f5acb5055'); /* Your background image */
     background-size: cover;
     background-position: center;
+    background-attachment: fixed; /* Keeps background fixed while scrolling */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,14 +14,15 @@ body {
     text-align: center;
 }
 
-/* Container for task list */
+/* Task container - White background to separate it from the background */
 .container {
-    background-color: rgba(255, 255, 255, 0.9); /* White background with some transparency */
+    background: rgba(255, 255, 255, 0.95); /* White with slight transparency */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     width: 350px;
-    max-width: 100%;
+    max-width: 90%;
+    backdrop-filter: blur(5px); /* Slight blur effect for a modern look */
 }
 
 /* Header style */
@@ -54,13 +55,25 @@ input[type="text"], input[type="datetime-local"] {
     border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 16px;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    width: 100%;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    appearance: none; /* Removes browser default styles */
+}
+
+/* Hover effect for input fields */
+input[type="text"]:hover, input[type="datetime-local"]:hover {
+    border-color: #0078d4; /* Microsoft blue */
+    background-color: #f8f9fa;
 }
 
 /* Focus effect for input fields */
 input[type="text"]:focus, input[type="datetime-local"]:focus {
-    border-color: #0078d4; /* Microsoft blue */
+    border-color: #005a9e;
     outline: none;
+    box-shadow: 0 0 5px rgba(0, 120, 212, 0.5);
 }
 
 /* Submit button for adding tasks */
@@ -72,12 +85,14 @@ button {
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    width: 100%;
 }
 
 /* Hover effect for the button */
 button:hover {
     background-color: #005a9e;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* List of tasks */
@@ -120,6 +135,13 @@ button.delete {
     border: none;
     cursor: pointer;
     font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+/* Delete button hover effect */
+button.delete:hover {
+    color: #c0392b;
+    background-color: rgba(231, 76, 60, 0.1);
 }
 
 /* Add a footer section for copyright or additional links */
@@ -137,4 +159,26 @@ footer a {
 
 footer a:hover {
     text-decoration: underline;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 480px) {
+    .container {
+        width: 90vw;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    input[type="text"], input[type="datetime-local"] {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px;
+    }
 }
