@@ -3,25 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Reminder App</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Task Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px;
+            z-index: 1000;
+        }
+        #taskList {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Task Reminder App</h1>
-        
-        <form id="taskForm">
-            <label for="task">Task:</label>
-            <input type="text" id="task" placeholder="Enter task" required>
-            
-            <label for="dueDate">Due Date & Time:</label>
-            <input type="datetime-local" id="dueDate" required>
-            
-            <button type="submit">Add Task</button>
-        </form>
+    <h1>Task Reminder</h1>
+    <form id="taskForm">
+        <input type="text" id="task" placeholder="Enter task" required>
+        <input type="datetime-local" id="dueDate" required>
+        <button type="submit">Add Task</button>
+    </form>
 
-        <ul id="taskList"></ul>
-    </div>
+    <ul id="taskList"></ul>
+
+    <button onclick="playNotificationSound()">Test Sound</button>
 
     <script src="script.js"></script>
 </body>
