@@ -1,112 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Reminder</title>
-    <style>
-        /* General Page Styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+document.getElementById('taskForm').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-        /* Task Container */
-        .container {
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    const taskInput = document.getElementById('task');
+    const dueDateInput = document.getElementById('dueDate');
+    
+    const taskDescription = taskInput.value.trim();
+    const dueDate = new Date(dueDateInput.value);
 
-        h1 {
-            color: #00d4ff;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+    if (taskDescription && dueDateInput.value) {
+        const task = {
+            id: Date.now(),
+            description: taskDescription,
+            dueDate: dueDate,
+            completed: false
+        };
 
-        /* Form Styling */
-        #taskForm {
-            width: 100%; /* Ensure form takes full container width */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        addTaskToList(task);
+        scheduleNotification(task);
+        
+        taskInput.value = '';
+        dueDateInput.value = '';
+    }
+});
 
-        input, button {
-            width: 90%; /* Ensures proper alignment */
-            padding: 12px;
-            margin: 8px 0;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            text-align: center;
-        }
+function addTaskToList(task) {
+    const taskList = document.getElementById('taskList');
+    
+    const li = document.createElement('li');
+    li.setAttribute('data-id', task.id);
+    li.innerHTML = `
+        <span>${task.description} - <small>${task.dueDate.toLocaleString()}</small></span>
+        <button class="complete-btn" onclick="markAsComplete(${task.id})">✔</button>
+        <button class="delete-btn" onclick="deleteTask(${task.id})">✖</button>
+    `;
+    
+    taskList.appendChild(li);
+}
 
-        input {
-            background: #2a2a2a;
-            color: white;
-            border: 1px solid #444;
-        }
+function markAsComplete(taskId) {
+    const taskItem = document.querySelector(`[data-id="${taskId}"]`);
+    if (taskItem) {
+        taskItem.classList.add('completed');
+        completedTasks.add(taskId);
+    }
+}
 
-        button {
-            background-color: #00d4ff;
-            color: black;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+function deleteTask(taskId) {
+    const taskItem = document.querySelector(`[data-id="${taskId}"]`);
+    if (taskItem) {
+        taskItem.remove();
+    }
+}
 
-        button:hover {
-            background-color: #008fb3;
-        }
+// Store completed tasks to prevent notifications for them
+const completedTasks = new Set();
 
-        /* Task List */
-        #taskList {
-            list-style-type: none;
-            padding: 0;
-            max-height: 200px;
-            overflow-y: auto;
-            margin-top: 10px;
-            width: 90%;
-        }
+// Request Notification Permission
+if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+}
 
-        li {
-            background: #2a2a2a;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-<body>
+function scheduleNotification(task) {
+    const timeUntilDue = task.dueDate.getTime() - Date.now();
+    
+    if (timeUntilDue > 0) {
+        setTimeout(() => {
+            if (!completedTasks.has(task.id)) { // Ensure notification only for pending tasks
+                playNotificationSound();
+                new Notification("Task Reminder", {
+                    body: `Your task "${task.description}" is now due!`,
+                    icon: 'https://via.placeholder.com/50'
+                });
+            }
+        }, timeUntilDue);
+    }
+}
 
-    <div class="container">
-        <h1>🚀 Task Reminder</h1>
-        <form id="taskForm">
-            <input type="text" id="task" placeholder="Enter your task" required>
-            <input type="datetime-local" id="dueDate" required>
-            <button type="submit">Add Task</button>
-        </form>
+// 🔊 Working Notification Sound Link
+let audio = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
 
-        <ul id="taskList"></ul>
-    </div>
+function playNotificationSound() {
+    audio.play().catch(error => {
+        console.warn("Autoplay blocked! Click anywhere to allow sound.");
+    });
+}
 
-</body>
-</html>
+// Enable sound on user interaction (fix autoplay issue)
+document.addEventListener('click', () => {
+    audio.play().catch(() => {
+        console.warn("Click detected, but still blocked.");
+    });
+}, { once: true });
