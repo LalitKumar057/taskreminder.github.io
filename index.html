@@ -16,7 +16,6 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            flex-direction: column;
         }
 
         /* Task Container */
@@ -26,32 +25,38 @@
             border-radius: 10px;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
-            margin-bottom: 15px;
             color: #00d4ff;
             font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         /* Form Styling */
         #taskForm {
+            width: 100%; /* Ensure form takes full container width */
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
         input, button {
-            width: 90%;  /* Ensures they are centered */
-            padding: 10px;
+            width: 90%; /* Ensures proper alignment */
+            padding: 12px;
             margin: 8px 0;
             border: none;
             border-radius: 5px;
             font-size: 16px;
-            display: block;
-            text-align: center; /* Centers text inside inputs */
+            text-align: center;
         }
 
         input {
@@ -79,6 +84,7 @@
             max-height: 200px;
             overflow-y: auto;
             margin-top: 10px;
+            width: 90%;
         }
 
         li {
@@ -86,39 +92,6 @@
             padding: 10px;
             margin: 5px 0;
             border-radius: 5px;
-            position: relative;
-            opacity: 0;
-            transform: translateY(10px);
-            animation: fadeIn 0.3s forwards;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .completed {
-            text-decoration: line-through;
-            color: #888;
-        }
-
-        .delete-btn {
-            background: red;
-            color: white;
-            font-size: 12px;
-            border: none;
-            padding: 5px;
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .delete-btn:hover {
-            background: darkred;
         }
     </style>
 </head>
