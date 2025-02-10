@@ -37,13 +37,21 @@
         }
 
         /* Form Styling */
+        #taskForm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         input, button {
-            width: 100%;
+            width: 90%;  /* Ensures they are centered */
             padding: 10px;
-            margin: 5px 0;
+            margin: 8px 0;
             border: none;
             border-radius: 5px;
             font-size: 16px;
+            display: block;
+            text-align: center; /* Centers text inside inputs */
         }
 
         input {
