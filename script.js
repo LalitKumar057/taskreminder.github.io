@@ -53,11 +53,16 @@ function markAsComplete(taskId) {
 // Store completed tasks to prevent unnecessary alerts
 const completedTasks = new Set();
 
-// Request Notification Permission
-if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-}
+// Request Notification Permission on page load
+document.addEventListener('DOMContentLoaded', () => {
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission().then(permission => {
+            console.log("Notification Permission:", permission);
+        });
+    }
+});
 
+// Schedule task notification
 function scheduleNotification(task) {
     const timeUntilDue = task.dueDate.getTime() - Date.now();
     
@@ -65,28 +70,34 @@ function scheduleNotification(task) {
         setTimeout(() => {
             if (!completedTasks.has(task.id)) { // Ensure notification for pending tasks only
                 playNotificationSound();
-                new Notification("Task Reminder", {
-                    body: `Your task "${task.description}" is now due!`,
-                    icon: 'https://via.placeholder.com/50'
-                });
+                if (Notification.permission === "granted") {
+                    new Notification("Task Reminder", {
+                        body: `Your task "${task.description}" is now due!`,
+                        icon: 'https://via.placeholder.com/50'
+                    });
+                } else {
+                    alert(`Your task "${task.description}" is now due!`);
+                }
             }
         }, timeUntilDue);
     }
 }
 
-// Play notification sound
+// Ensuring Sound Plays
 function playNotificationSound() {
-    let sound = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Use a new instance
-    sound.play().catch(error => {
-        console.warn("Sound playback blocked:", error);
+    let sound = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Use a valid sound URL
+    sound.play().then(() => {
+        console.log("Notification sound played.");
+    }).catch(error => {
+        console.warn("Sound playback blocked. Try clicking anywhere on the page first.");
     });
 }
 
-// Enable sound on first user interaction
+// Enable sound on first user interaction (browser fix)
 document.addEventListener('click', () => {
     let audio = new Audio('https://www.soundjay.com/button/beep-07.wav');
     audio.play().then(() => {
-        console.log("Audio enabled after user interaction.");
+        console.log("Audio unlocked after user interaction.");
     }).catch(() => {
         console.warn("User interaction required for sound.");
     });
