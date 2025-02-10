@@ -74,19 +74,20 @@ function scheduleNotification(task) {
     }
 }
 
-// Ensuring Sound Works Even with Browser Restrictions
-let audio = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Replace with your sound file
-
-// Play sound when due
+// Play notification sound
 function playNotificationSound() {
-    audio.play().catch(error => {
-        console.warn("Autoplay blocked! Click anywhere to allow sound.");
+    let sound = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Use a new instance
+    sound.play().catch(error => {
+        console.warn("Sound playback blocked:", error);
     });
 }
 
-// Enable sound on user interaction (browser workaround)
+// Enable sound on first user interaction
 document.addEventListener('click', () => {
-    audio.play().catch(() => {
-        console.warn("Click detected, but still blocked.");
+    let audio = new Audio('https://www.soundjay.com/button/beep-07.wav');
+    audio.play().then(() => {
+        console.log("Audio enabled after user interaction.");
+    }).catch(() => {
+        console.warn("User interaction required for sound.");
     });
 }, { once: true });
