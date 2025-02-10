@@ -1,3 +1,12 @@
+document.addEventListener('DOMContentLoaded', () => {
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission().then(permission => {
+            console.log("Notification Permission:", permission);
+        });
+    }
+});
+
+// Handle task submission
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -23,6 +32,7 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
     }
 });
 
+// Add task to list
 function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
     
@@ -38,6 +48,7 @@ function addTaskToList(task) {
     taskList.appendChild(li);
 }
 
+// Mark task as complete
 function markAsComplete(taskId) {
     const taskList = document.getElementById('taskList');
     const taskItem = taskList.querySelector(`[data-id="${taskId}"]`);
@@ -50,17 +61,8 @@ function markAsComplete(taskId) {
     }
 }
 
-// Store completed tasks to prevent unnecessary alerts
+// Store completed tasks to prevent notifications
 const completedTasks = new Set();
-
-// Request Notification Permission on page load
-document.addEventListener('DOMContentLoaded', () => {
-    if (Notification.permission !== "granted") {
-        Notification.requestPermission().then(permission => {
-            console.log("Notification Permission:", permission);
-        });
-    }
-});
 
 // Schedule task notification
 function scheduleNotification(task) {
@@ -83,19 +85,19 @@ function scheduleNotification(task) {
     }
 }
 
-// Ensuring Sound Plays
+// Fix notification sound issue
 function playNotificationSound() {
-    let sound = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Use a valid sound URL
+    let sound = new Audio('https://www.myinstants.com/media/sounds/tindeck_1.mp3'); // Alternative sound
     sound.play().then(() => {
         console.log("Notification sound played.");
     }).catch(error => {
-        console.warn("Sound playback blocked. Try clicking anywhere on the page first.");
+        console.warn("Sound playback blocked. Click anywhere on the page to allow.");
     });
 }
 
 // Enable sound on first user interaction (browser fix)
 document.addEventListener('click', () => {
-    let audio = new Audio('https://www.soundjay.com/button/beep-07.wav');
+    let audio = new Audio('https://www.myinstants.com/media/sounds/tindeck_1.mp3');
     audio.play().then(() => {
         console.log("Audio unlocked after user interaction.");
     }).catch(() => {
