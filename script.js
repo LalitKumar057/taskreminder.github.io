@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Store completed tasks persistently
+// Store completed tasks
 const completedTasks = new Set(JSON.parse(localStorage.getItem('completedTasks')) || []);
 
 // Handle task submission
@@ -16,13 +16,15 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
     const taskInput = document.getElementById('task');
     const dueDateInput = document.getElementById('dueDate');
 
-    const taskDescription = taskInput.value;
-    const dueDate = new Date(dueDateInput.value);
+    const taskDescription = taskInput.value.trim();
+    const dueDateValue = dueDateInput.value.trim();
 
-    if (!taskDescription || isNaN(dueDate.getTime())) {
+    if (!taskDescription || !dueDateValue) {
         alert("Please enter a valid task and due date.");
         return;
     }
+
+    const dueDate = new Date(dueDateValue);
 
     const task = {
         id: Date.now(),
@@ -41,30 +43,31 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
 // Add task to list
 function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
-
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
     li.innerHTML = `
-        <span>${task.description}</span>
-        <br>
-        <small class="task-time">Due: ${task.dueDate.toLocaleString()}</small>
-        <button onclick="markAsComplete(${task.id})">Mark as Complete</button>
+        ${task.description} - ${task.dueDate.toLocaleString()}
+        <button onclick="markAsComplete(${task.id})">✔</button>
+        <button onclick="deleteTask(${task.id})">✖</button>
     `;
-
     taskList.appendChild(li);
 }
 
 // Mark task as complete
 function markAsComplete(taskId) {
-    const taskList = document.getElementById('taskList');
-    const taskItem = taskList.querySelector(`[data-id="${taskId}"]`);
+    const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
         taskItem.classList.add('completed');
-        taskItem.querySelector('button').disabled = true;
-
-        // Store completion status
         completedTasks.add(taskId);
-        localStorage.setItem('completedTasks', JSON.stringify([...completedTasks])); // Save persistently
+        localStorage.setItem('completedTasks', JSON.stringify([...completedTasks]));
+    }
+}
+
+// Delete task
+function deleteTask(taskId) {
+    const taskItem = document.querySelector(`[data-id="${taskId}"]`);
+    if (taskItem) {
+        taskItem.remove();
     }
 }
 
@@ -80,28 +83,26 @@ function scheduleNotification(task) {
     setTimeout(() => {
         if (!completedTasks.has(task.id)) {
             playNotificationSound();
-            if (Notification.permission === "granted") {
-                new Notification("Task Reminder", {
-                    body: `Your task "${task.description}" is now due!`,
-                    icon: 'https://via.placeholder.com/50'
-                });
-            } else {
-                alert(`Your task "${task.description}" is now due!`);
-            }
+            new Notification("Task Reminder", {
+                body: `Your task "${task.description}" is now due!`,
+                icon: 'https://via.placeholder.com/50'
+            });
         }
     }, timeUntilDue);
 }
 
-// Fix notification sound issue
+// 🔊 Working Notification Sound Link
+let audio = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
+
 function playNotificationSound() {
-    const sound = new Audio('https://www.myinstants.com/media/sounds/tindeck_1.mp3');
-    sound.play().then(() => {
-        console.log("Notification sound played.");
-    }).catch(error => {
-        console.warn("Sound playback blocked. Click anywhere on the page to allow.");
+    audio.play().catch(error => {
+        console.warn("Autoplay blocked! Click anywhere to allow sound.");
     });
 }
 
-// Enable sound on first user interaction
-const notificationSound = new Audio('https://www.myinstants.com/media/sounds/tindeck_1.mp3');
-document.addEventListener('click', () => notificationSound.play(), { once: true });
+// Enable sound on user interaction (fix autoplay issue)
+document.addEventListener('click', () => {
+    audio.play().catch(() => {
+        console.warn("Click detected, but still blocked.");
+    });
+}, { once: true });
