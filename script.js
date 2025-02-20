@@ -51,7 +51,7 @@ function markAsComplete(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
         taskItem.classList.add('completed');
-        completedTasks.add(taskId);
+        completedTasks.add(taskId); // Add to completed tasks
     }
 }
 
@@ -65,27 +65,22 @@ function deleteTask(taskId) {
 
 function scheduleNotification(task) {
     const timeUntilDue = task.dueDate.getTime() - Date.now();
-    
+
     if (timeUntilDue > 0) {
         setTimeout(() => {
-            if (!completedTasks.has(task.id)) { // Only notify if not completed
+            if (!completedTasks.has(task.id)) {
                 playNotificationSound();
-                if (Notification.permission === "granted") {
-                    new Notification("Task Reminder", {
-                        body: `Your task "${task.description}" is now due!`,
-                        icon: 'https://via.placeholder.com/50'
-                    });
-                } else {
-                    alert(`Your task "${task.description}" is now due!`);
-                }
+                new Notification("Task Reminder", {
+                    body: `Your task "${task.description}" is now due!`,
+                    icon: 'https://via.placeholder.com/50'
+                });
             }
         }, timeUntilDue);
     }
 }
 
 function playNotificationSound() {
-    notificationSound.currentTime = 0; // Reset sound to start
-    notificationSound.play().catch((error) => {
+    notificationSound.play().catch(error => {
         console.warn("Autoplay blocked! Click anywhere to allow sound.");
     });
 }
