@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const completedTasks = new Set();
+const notificationTimers = new Map(); // Store timeout references
 let notificationSound = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
 notificationSound.preload = "auto"; // Preload sound but do not play
 
@@ -21,8 +22,7 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
         const task = {
             id: Date.now(),
             description: taskDescription,
-            dueDate: dueDate,
-            completed: false
+            dueDate: dueDate
         };
 
         addTaskToList(task);
@@ -35,7 +35,7 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
 
 function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
-    
+
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
     li.innerHTML = `
@@ -43,7 +43,7 @@ function addTaskToList(task) {
         <button onclick="markAsComplete(${task.id})">✔</button>
         <button onclick="deleteTask(${task.id})">✖</button>
     `;
-    
+
     taskList.appendChild(li);
 }
 
@@ -51,7 +51,13 @@ function markAsComplete(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
         taskItem.classList.add('completed');
-        completedTasks.add(taskId); // Add to completed tasks
+        completedTasks.add(taskId); // Mark as completed
+
+        // 🔥 **Cancel notification if it was scheduled**
+        if (notificationTimers.has(taskId)) {
+            clearTimeout(notificationTimers.get(taskId));
+            notificationTimers.delete(taskId);
+        }
     }
 }
 
@@ -60,6 +66,12 @@ function deleteTask(taskId) {
     if (taskItem) {
         taskItem.remove();
         completedTasks.delete(taskId);
+
+        // 🔥 **Cancel notification if task is deleted**
+        if (notificationTimers.has(taskId)) {
+            clearTimeout(notificationTimers.get(taskId));
+            notificationTimers.delete(taskId);
+        }
     }
 }
 
@@ -67,8 +79,8 @@ function scheduleNotification(task) {
     const timeUntilDue = task.dueDate.getTime() - Date.now();
 
     if (timeUntilDue > 0) {
-        setTimeout(() => {
-            if (!completedTasks.has(task.id)) { // CHECK AGAIN before playing sound
+        const timer = setTimeout(() => {
+            if (!completedTasks.has(task.id)) { // 🔥 **Final check before playing sound**
                 playNotificationSound();
                 new Notification("Task Reminder", {
                     body: `Your task "${task.description}" is now due!`,
@@ -76,6 +88,9 @@ function scheduleNotification(task) {
                 });
             }
         }, timeUntilDue);
+
+        // **Store the timeout reference to allow cancellation**
+        notificationTimers.set(task.id, timer);
     }
 }
 
