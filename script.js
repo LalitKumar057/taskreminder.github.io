@@ -15,7 +15,7 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
         };
 
         addTaskToList(task);
-        scheduleNotification(task);
+        scheduleNotification(task); // Schedule notification
 
         taskInput.value = '';
         dueDateInput.value = '';
@@ -26,13 +26,11 @@ function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
-    
     li.innerHTML = `
-        ${task.description} - ${task.dueDate.toLocaleString()}
-        <button onclick="markAsComplete(${task.id})">✔</button>
+        ${task.description} - ${task.dueDate.toLocaleString()} 
+        <button onclick="markAsComplete(${task.id})">✔</button> 
         <button onclick="deleteTask(${task.id})">✖</button>
     `;
-
     taskList.appendChild(li);
 }
 
@@ -40,7 +38,7 @@ function markAsComplete(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
         taskItem.classList.add('completed');
-        completedTasks.add(taskId); // Prevent notifications for completed tasks
+        completedTasks.add(taskId);
     }
 }
 
@@ -48,11 +46,11 @@ function deleteTask(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
         taskItem.remove();
-        completedTasks.delete(taskId); // Remove from completed list
+        completedTasks.delete(taskId); // Remove from completed tasks
     }
 }
 
-// Store completed tasks to prevent notifications
+// Store completed tasks to prevent notifications for them
 const completedTasks = new Set();
 
 // Request Notification Permission
@@ -62,10 +60,9 @@ if (Notification.permission !== "granted") {
 
 function scheduleNotification(task) {
     const timeUntilDue = task.dueDate.getTime() - Date.now();
-
     if (timeUntilDue > 0) {
         setTimeout(() => {
-            if (!completedTasks.has(task.id)) { // Ensure notification only for pending tasks
+            if (!completedTasks.has(task.id)) {
                 playNotificationSound();
                 new Notification("Task Reminder", {
                     body: `Your task "${task.description}" is now due!`,
@@ -76,16 +73,17 @@ function scheduleNotification(task) {
     }
 }
 
-// 🔊 Working Notification Sound
+// 🔊 Notification Sound (Only plays at due time)
 let audio = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
 
 function playNotificationSound() {
+    audio.currentTime = 0;
     audio.play().catch(error => {
         console.warn("Autoplay blocked! Click anywhere to allow sound.");
     });
 }
 
-// Enable sound on user interaction (fix autoplay issue)
+// Enable sound on user interaction
 document.addEventListener('click', () => {
     audio.play().catch(() => {
         console.warn("Click detected, but still blocked.");
