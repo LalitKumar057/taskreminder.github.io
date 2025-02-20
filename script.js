@@ -55,6 +55,12 @@ function markAsComplete(taskId) {
             clearTimeout(notificationTimers.get(taskId));
             notificationTimers.delete(taskId);
         }
+
+        // 🛑 **Stop sound immediately if playing**
+        if (!notificationSound.paused) {
+            notificationSound.pause();
+            notificationSound.currentTime = 0; // Reset sound
+        }
     }
 }
 
@@ -68,6 +74,12 @@ function deleteTask(taskId) {
         if (notificationTimers.has(taskId)) {
             clearTimeout(notificationTimers.get(taskId));
             notificationTimers.delete(taskId);
+        }
+
+        // 🛑 **Stop sound immediately if playing**
+        if (!notificationSound.paused) {
+            notificationSound.pause();
+            notificationSound.currentTime = 0;
         }
     }
 }
