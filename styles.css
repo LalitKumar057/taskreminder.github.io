@@ -1,6 +1,12 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    background: url('image.png') no-repeat center center fixed;
+    background-size: cover;
+}
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
     background-color: #f4f4f4;
 }
 
