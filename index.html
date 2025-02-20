@@ -1,93 +1,24 @@
-document.getElementById('taskForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Reminder</title>
+</head>
+<body>
+    <h1>Task Reminder</h1>
 
-    const taskInput = document.getElementById('task');
-    const dueDateInput = document.getElementById('dueDate');
-    
-    const taskDescription = taskInput.value.trim();
-    const dueDate = new Date(dueDateInput.value);
+    <!-- Task Form -->
+    <form id="taskForm">
+        <input type="text" id="task" placeholder="Enter your task" required>
+        <input type="datetime-local" id="dueDate" required>
+        <button type="submit">Add Task</button>
+    </form>
 
-    if (taskDescription && dueDateInput.value) {
-        const task = {
-            id: Date.now(),
-            description: taskDescription,
-            dueDate: dueDate,
-            completed: false
-        };
+    <!-- Task List -->
+    <ul id="taskList"></ul>
 
-        addTaskToList(task);
-        scheduleNotification(task);
-        
-        taskInput.value = '';
-        dueDateInput.value = '';
-    }
-});
-
-function addTaskToList(task) {
-    const taskList = document.getElementById('taskList');
-    
-    const li = document.createElement('li');
-    li.setAttribute('data-id', task.id);
-    li.innerHTML = `
-        <span>${task.description} - <small>${task.dueDate.toLocaleString()}</small></span>
-        <button class="complete-btn" onclick="markAsComplete(${task.id})">✔</button>
-        <button class="delete-btn" onclick="deleteTask(${task.id})">✖</button>
-    `;
-    
-    taskList.appendChild(li);
-}
-
-function markAsComplete(taskId) {
-    const taskItem = document.querySelector(`[data-id="${taskId}"]`);
-    if (taskItem) {
-        taskItem.classList.add('completed');
-        completedTasks.add(taskId);
-    }
-}
-
-function deleteTask(taskId) {
-    const taskItem = document.querySelector(`[data-id="${taskId}"]`);
-    if (taskItem) {
-        taskItem.remove();
-    }
-}
-
-// Store completed tasks to prevent notifications for them
-const completedTasks = new Set();
-
-// Request Notification Permission
-if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-}
-
-function scheduleNotification(task) {
-    const timeUntilDue = task.dueDate.getTime() - Date.now();
-    
-    if (timeUntilDue > 0) {
-        setTimeout(() => {
-            if (!completedTasks.has(task.id)) { // Ensure notification only for pending tasks
-                playNotificationSound();
-                new Notification("Task Reminder", {
-                    body: `Your task "${task.description}" is now due!`,
-                    icon: 'https://via.placeholder.com/50'
-                });
-            }
-        }, timeUntilDue);
-    }
-}
-
-// 🔊 Working Notification Sound Link
-let audio = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
-
-function playNotificationSound() {
-    audio.play().catch(error => {
-        console.warn("Autoplay blocked! Click anywhere to allow sound.");
-    });
-}
-
-// Enable sound on user interaction (fix autoplay issue)
-document.addEventListener('click', () => {
-    audio.play().catch(() => {
-        console.warn("Click detected, but still blocked.");
-    });
-}, { once: true });
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
