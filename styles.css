@@ -1,69 +1,50 @@
-/* Reset styles */
-body, h1, form, ul {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-/* Set background image */
 body {
+    font-family: Arial, sans-serif;
     background: url('image.png') no-repeat center center fixed;
     background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
-/* Center the container */
 .container {
     background: rgba(255, 255, 255, 0.8);
+    width: 50%;
+    margin: 50px auto;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 350px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Form Styling */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+h1 {
+    margin-bottom: 10px;
 }
 
-input, button {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-/* Button Style */
-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Task List */
 ul {
-    margin-top: 20px;
     list-style: none;
     padding: 0;
 }
 
 li {
-    background: #fff;
+    background: #f4f4f4;
+    margin: 10px 0;
     padding: 10px;
-    margin-top: 5px;
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: gray;
+}
+
+button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background: green;
+    color: white;
 }
