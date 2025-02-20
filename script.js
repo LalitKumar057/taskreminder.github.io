@@ -10,12 +10,12 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
         const task = {
             id: Date.now(),
             description: taskDescription,
-            dueDate: dueDate,
+            dueDate: dueDate.getTime(),  // Store as timestamp
             completed: false
         };
 
         addTaskToList(task);
-        scheduleNotification(task); // Schedule notification
+        scheduleNotification(task); // Only schedule, no immediate sound
 
         taskInput.value = '';
         dueDateInput.value = '';
@@ -27,7 +27,7 @@ function addTaskToList(task) {
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
     li.innerHTML = `
-        ${task.description} - ${task.dueDate.toLocaleString()} 
+        ${task.description} - ${new Date(task.dueDate).toLocaleString()} 
         <button onclick="markAsComplete(${task.id})">✔</button> 
         <button onclick="deleteTask(${task.id})">✖</button>
     `;
@@ -46,11 +46,11 @@ function deleteTask(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
         taskItem.remove();
-        completedTasks.delete(taskId); // Remove from completed tasks
+        completedTasks.delete(taskId);
     }
 }
 
-// Store completed tasks to prevent notifications for them
+// Store completed tasks to prevent notifications
 const completedTasks = new Set();
 
 // Request Notification Permission
@@ -59,7 +59,8 @@ if (Notification.permission !== "granted") {
 }
 
 function scheduleNotification(task) {
-    const timeUntilDue = task.dueDate.getTime() - Date.now();
+    const timeUntilDue = task.dueDate - Date.now(); // Time left in ms
+
     if (timeUntilDue > 0) {
         setTimeout(() => {
             if (!completedTasks.has(task.id)) {
