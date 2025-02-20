@@ -1,9 +1,8 @@
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
-
+    
     const taskInput = document.getElementById('task');
     const dueDateInput = document.getElementById('dueDate');
-
     const taskDescription = taskInput.value.trim();
     const dueDate = new Date(dueDateInput.value);
 
@@ -26,21 +25,22 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
 function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
     const li = document.createElement('li');
-
     li.setAttribute('data-id', task.id);
+    
     li.innerHTML = `
-        ${task.description} - ${task.dueDate.toLocaleString()} 
+        ${task.description} - ${task.dueDate.toLocaleString()}
         <button onclick="markAsComplete(${task.id})">✔</button>
         <button onclick="deleteTask(${task.id})">✖</button>
     `;
+
     taskList.appendChild(li);
 }
 
 function markAsComplete(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
-        taskItem.style.textDecoration = "line-through";
-        completedTasks.add(taskId);
+        taskItem.classList.add('completed');
+        completedTasks.add(taskId); // Prevent notifications for completed tasks
     }
 }
 
@@ -48,10 +48,11 @@ function deleteTask(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
         taskItem.remove();
+        completedTasks.delete(taskId); // Remove from completed list
     }
 }
 
-// Store completed tasks to prevent notifications for them
+// Store completed tasks to prevent notifications
 const completedTasks = new Set();
 
 // Request Notification Permission
@@ -61,9 +62,10 @@ if (Notification.permission !== "granted") {
 
 function scheduleNotification(task) {
     const timeUntilDue = task.dueDate.getTime() - Date.now();
+
     if (timeUntilDue > 0) {
         setTimeout(() => {
-            if (!completedTasks.has(task.id)) {
+            if (!completedTasks.has(task.id)) { // Ensure notification only for pending tasks
                 playNotificationSound();
                 new Notification("Task Reminder", {
                     body: `Your task "${task.description}" is now due!`,
