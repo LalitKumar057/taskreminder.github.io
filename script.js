@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const completedTasks = new Set();
 let notificationSound = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
+notificationSound.preload = "auto"; // Ensures sound is loaded but doesn't play immediately
 
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -32,7 +33,6 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
     }
 });
 
-// Add task to list
 function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
     
@@ -47,7 +47,6 @@ function addTaskToList(task) {
     taskList.appendChild(li);
 }
 
-// Mark task as complete
 function markAsComplete(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
@@ -56,7 +55,6 @@ function markAsComplete(taskId) {
     }
 }
 
-// Delete task
 function deleteTask(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
@@ -65,7 +63,6 @@ function deleteTask(taskId) {
     }
 }
 
-// Schedule task notification
 function scheduleNotification(task) {
     const timeUntilDue = task.dueDate.getTime() - Date.now();
     
@@ -86,17 +83,17 @@ function scheduleNotification(task) {
     }
 }
 
-// Play notification sound **ONLY when task is due**
 function playNotificationSound() {
+    notificationSound.currentTime = 0; // Reset sound to start
     notificationSound.play().catch((error) => {
         console.warn("Autoplay blocked! Click anywhere to allow sound.");
     });
 }
 
-// 🚨 FIX: Remove autoplay issue when clicking the page
+// 🚨 FIX: Prevent autoplay issue (but does NOT play sound)
 document.addEventListener('click', () => {
     notificationSound.play().then(() => {
         notificationSound.pause();
-        notificationSound.currentTime = 0; // Stop sound after playing once
+        notificationSound.currentTime = 0;
     }).catch(() => {});
 }, { once: true });
