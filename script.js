@@ -1,8 +1,23 @@
+document.addEventListener('DOMContentLoaded', () => {
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+    }
+});
+
+const completedTasks = new Set();
+let notificationSound = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
+
+// Ensure sound plays only when task is due
+document.addEventListener('click', () => {
+    notificationSound.play().catch(() => {});
+}, { once: true });
+
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    
+
     const taskInput = document.getElementById('task');
     const dueDateInput = document.getElementById('dueDate');
+
     const taskDescription = taskInput.value.trim();
     const dueDate = new Date(dueDateInput.value);
 
@@ -10,30 +25,34 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
         const task = {
             id: Date.now(),
             description: taskDescription,
-            dueDate: dueDate.getTime(),  // Store as timestamp
+            dueDate: dueDate,
             completed: false
         };
 
         addTaskToList(task);
-        scheduleNotification(task); // Only schedule, no immediate sound
+        scheduleNotification(task);
 
         taskInput.value = '';
         dueDateInput.value = '';
     }
 });
 
+// Add task to list
 function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
+    
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
     li.innerHTML = `
-        ${task.description} - ${new Date(task.dueDate).toLocaleString()} 
-        <button onclick="markAsComplete(${task.id})">✔</button> 
+        <span>${task.description} - ${task.dueDate.toLocaleString()}</span>
+        <button onclick="markAsComplete(${task.id})">✔</button>
         <button onclick="deleteTask(${task.id})">✖</button>
     `;
+    
     taskList.appendChild(li);
 }
 
+// Mark task as complete
 function markAsComplete(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
@@ -42,6 +61,7 @@ function markAsComplete(taskId) {
     }
 }
 
+// Delete task
 function deleteTask(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
@@ -50,43 +70,30 @@ function deleteTask(taskId) {
     }
 }
 
-// Store completed tasks to prevent notifications
-const completedTasks = new Set();
-
-// Request Notification Permission
-if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-}
-
+// Schedule task notification
 function scheduleNotification(task) {
-    const timeUntilDue = task.dueDate - Date.now(); // Time left in ms
-
+    const timeUntilDue = task.dueDate.getTime() - Date.now();
+    
     if (timeUntilDue > 0) {
         setTimeout(() => {
             if (!completedTasks.has(task.id)) {
                 playNotificationSound();
-                new Notification("Task Reminder", {
-                    body: `Your task "${task.description}" is now due!`,
-                    icon: 'https://via.placeholder.com/50'
-                });
+                if (Notification.permission === "granted") {
+                    new Notification("Task Reminder", {
+                        body: `Your task "${task.description}" is now due!`,
+                        icon: 'https://via.placeholder.com/50'
+                    });
+                } else {
+                    alert(`Your task "${task.description}" is now due!`);
+                }
             }
         }, timeUntilDue);
     }
 }
 
-// 🔊 Notification Sound (Only plays at due time)
-let audio = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
-
+// Play notification sound when task is due
 function playNotificationSound() {
-    audio.currentTime = 0;
-    audio.play().catch(error => {
+    notificationSound.play().catch(() => {
         console.warn("Autoplay blocked! Click anywhere to allow sound.");
     });
 }
-
-// Enable sound on user interaction
-document.addEventListener('click', () => {
-    audio.play().catch(() => {
-        console.warn("Click detected, but still blocked.");
-    });
-}, { once: true });
