@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM Loaded"); // Debugging log
+
+    const taskForm = document.getElementById('taskForm');
+    if (!taskForm) {
+        console.error("Error: taskForm element not found!");
+        return;
+    }
+
     if (Notification.permission !== "granted") {
         Notification.requestPermission().then(permission => {
             console.log("Notification Permission:", permission);
@@ -6,15 +14,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Store completed tasks
-const completedTasks = new Set(JSON.parse(localStorage.getItem('completedTasks')) || []);
+// Store completed tasks to prevent duplicate notifications
+const completedTasks = new Set();
 
 // Handle task submission
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
+    console.log("Form Submitted"); // Debugging log
+
     const taskInput = document.getElementById('task');
     const dueDateInput = document.getElementById('dueDate');
+
+    if (!taskInput || !dueDateInput) {
+        console.error("Error: Task input or due date input not found!");
+        return;
+    }
 
     const taskDescription = taskInput.value.trim();
     const dueDateValue = dueDateInput.value.trim();
@@ -33,6 +48,8 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
         completed: false
     };
 
+    console.log("Adding task:", task); // Debugging log
+
     addTaskToList(task);
     scheduleNotification(task);
 
@@ -43,6 +60,11 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
 // Add task to list
 function addTaskToList(task) {
     const taskList = document.getElementById('taskList');
+    if (!taskList) {
+        console.error("Error: taskList element not found!");
+        return;
+    }
+
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
     li.innerHTML = `
@@ -50,25 +72,31 @@ function addTaskToList(task) {
         <button onclick="markAsComplete(${task.id})">✔</button>
         <button onclick="deleteTask(${task.id})">✖</button>
     `;
+
     taskList.appendChild(li);
 }
 
 // Mark task as complete
 function markAsComplete(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
-    if (taskItem) {
-        taskItem.classList.add('completed');
-        completedTasks.add(taskId);
-        localStorage.setItem('completedTasks', JSON.stringify([...completedTasks]));
+    if (!taskItem) {
+        console.error(`Error: Task with ID ${taskId} not found!`);
+        return;
     }
+
+    taskItem.classList.add('completed');
+    completedTasks.add(taskId);
 }
 
 // Delete task
 function deleteTask(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
-    if (taskItem) {
-        taskItem.remove();
+    if (!taskItem) {
+        console.error(`Error: Task with ID ${taskId} not found!`);
+        return;
     }
+
+    taskItem.remove();
 }
 
 // Schedule task notification
@@ -79,6 +107,8 @@ function scheduleNotification(task) {
         alert(`Task "${task.description}" is already due or has an invalid time.`);
         return;
     }
+
+    console.log(`Notification scheduled in ${timeUntilDue / 1000} seconds for task:`, task);
 
     setTimeout(() => {
         if (!completedTasks.has(task.id)) {
@@ -106,3 +136,4 @@ document.addEventListener('click', () => {
         console.warn("Click detected, but still blocked.");
     });
 }, { once: true });
+
