@@ -7,11 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
 const completedTasks = new Set();
 let notificationSound = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
 
-// Ensure sound plays only when task is due
-document.addEventListener('click', () => {
-    notificationSound.play().catch(() => {});
-}, { once: true });
-
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -91,9 +86,17 @@ function scheduleNotification(task) {
     }
 }
 
-// Play notification sound when task is due
+// Play notification sound **ONLY when task is due**
 function playNotificationSound() {
-    notificationSound.play().catch(() => {
+    notificationSound.play().catch((error) => {
         console.warn("Autoplay blocked! Click anywhere to allow sound.");
     });
 }
+
+// 🚨 FIX: Remove autoplay issue when clicking the page
+document.addEventListener('click', () => {
+    notificationSound.play().then(() => {
+        notificationSound.pause();
+        notificationSound.currentTime = 0; // Stop sound after playing once
+    }).catch(() => {});
+}, { once: true });
