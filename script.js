@@ -68,7 +68,7 @@ function scheduleNotification(task) {
 
     if (timeUntilDue > 0) {
         setTimeout(() => {
-            if (!completedTasks.has(task.id)) {
+            if (!completedTasks.has(task.id)) { // CHECK AGAIN before playing sound
                 playNotificationSound();
                 new Notification("Task Reminder", {
                     body: `Your task "${task.description}" is now due!`,
