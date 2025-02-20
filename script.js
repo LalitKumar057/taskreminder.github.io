@@ -53,7 +53,7 @@ function markAsComplete(taskId) {
         taskItem.classList.add('completed');
         completedTasks.add(taskId); // Mark as completed
 
-        // 🔥 **Cancel notification if it was scheduled**
+        // 🔥 **Cancel notification & sound if marked as complete**
         if (notificationTimers.has(taskId)) {
             clearTimeout(notificationTimers.get(taskId));
             notificationTimers.delete(taskId);
@@ -67,7 +67,7 @@ function deleteTask(taskId) {
         taskItem.remove();
         completedTasks.delete(taskId);
 
-        // 🔥 **Cancel notification if task is deleted**
+        // 🔥 **Cancel notification & sound if task is deleted**
         if (notificationTimers.has(taskId)) {
             clearTimeout(notificationTimers.get(taskId));
             notificationTimers.delete(taskId);
@@ -80,7 +80,8 @@ function scheduleNotification(task) {
 
     if (timeUntilDue > 0) {
         const timer = setTimeout(() => {
-            if (!completedTasks.has(task.id)) { // 🔥 **Final check before playing sound**
+            // 🔥 **Final check before playing sound**
+            if (!completedTasks.has(task.id)) { 
                 playNotificationSound();
                 new Notification("Task Reminder", {
                     body: `Your task "${task.description}" is now due!`,
@@ -95,7 +96,9 @@ function scheduleNotification(task) {
 }
 
 function playNotificationSound() {
-    notificationSound.play().catch(error => {
-        console.warn("Autoplay blocked! Click anywhere to allow sound.");
-    });
+    if (notificationSound) {
+        notificationSound.play().catch(error => {
+            console.warn("Autoplay blocked! Click anywhere to allow sound.");
+        });
+    }
 }
