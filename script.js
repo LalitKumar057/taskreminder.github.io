@@ -6,17 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const completedTasks = new Set();
 let notificationSound = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
-notificationSound.preload = "auto";
-
-// Ensure sound is loaded but does NOT play on task addition
-document.addEventListener('click', () => {
-    notificationSound.muted = true; // Mute while unlocking
-    notificationSound.play().then(() => {
-        notificationSound.pause();
-        notificationSound.currentTime = 0;
-        notificationSound.muted = false; // Unmute after unlocking
-    }).catch(() => {});
-}, { once: true });
+notificationSound.preload = "auto"; // Preload sound but do not play
 
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -78,7 +68,7 @@ function scheduleNotification(task) {
     
     if (timeUntilDue > 0) {
         setTimeout(() => {
-            if (!completedTasks.has(task.id)) {
+            if (!completedTasks.has(task.id)) { // Only notify if not completed
                 playNotificationSound();
                 if (Notification.permission === "granted") {
                     new Notification("Task Reminder", {
