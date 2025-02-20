@@ -6,7 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const completedTasks = new Set();
 let notificationSound = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
-notificationSound.preload = "auto"; // Ensures sound is loaded but doesn't play immediately
+notificationSound.preload = "auto";
+
+// Ensure sound is loaded but does NOT play on task addition
+document.addEventListener('click', () => {
+    notificationSound.muted = true; // Mute while unlocking
+    notificationSound.play().then(() => {
+        notificationSound.pause();
+        notificationSound.currentTime = 0;
+        notificationSound.muted = false; // Unmute after unlocking
+    }).catch(() => {});
+}, { once: true });
 
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -89,11 +99,3 @@ function playNotificationSound() {
         console.warn("Autoplay blocked! Click anywhere to allow sound.");
     });
 }
-
-// 🚨 FIX: Prevent autoplay issue (but does NOT play sound)
-document.addEventListener('click', () => {
-    notificationSound.play().then(() => {
-        notificationSound.pause();
-        notificationSound.currentTime = 0;
-    }).catch(() => {});
-}, { once: true });
