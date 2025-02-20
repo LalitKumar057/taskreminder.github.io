@@ -1,156 +1,47 @@
-/* Import Google Font for date & time */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
-/* Global styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f3f4f6;
-    background-image: url('https://images.unsplash.com/photo-1560264411-380f5acb5055'); /* Background image */
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    color: #333;
+    font-family: Arial, sans-serif;
     text-align: center;
+    background-color: #f4f4f4;
 }
 
-/* Container for task list */
-.container {
-    background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    width: 350px;
-    max-width: 100%;
-    text-align: center; /* Fix alignment */
-}
-
-/* Header style */
 h1 {
-    margin-bottom: 20px;
-    font-size: 30px;
     color: #333;
-    font-weight: bold;
 }
 
-/* Form container for adding tasks */
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: center; /* Center inputs */
+    margin: 20px 0;
 }
 
-/* Labels for input fields */
-label {
-    margin-top: 10px;
-    font-weight: 600;
-    color: #555;
-    text-align: left;
-    width: 100%;
+input {
+    padding: 10px;
+    margin: 5px;
 }
 
-/* Input fields */
-input[type="text"], input[type="datetime-local"] {
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-    width: 100%;
-}
-
-/* Style for date and time input */
-input[type="datetime-local"] {
-    font-family: 'Poppins', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: #000; /* Black text */
-    background-color: #fff;
-}
-
-/* Focus effect */
-input[type="text"]:focus, input[type="datetime-local"]:focus {
-    border-color: #0078d4;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 120, 212, 0.5);
-}
-
-/* Submit button */
 button {
-    padding: 12px;
-    background-color: #0078d4;
+    padding: 10px;
+    background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    width: 100%;
 }
 
-/* Hover effect */
 button:hover {
-    background-color: #005a9e;
+    background-color: #218838;
 }
 
-/* List of tasks */
 ul {
     list-style: none;
     padding: 0;
-    margin-top: 20px;
 }
 
-/* Task item */
 li {
-    background-color: #ffffff;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-size: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: white;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
 }
 
-/* Task hover effect */
-li:hover {
-    background-color: #f0f1f3;
-}
-
-/* Completed task */
-li.completed {
-    background-color: #d4edda;
+.completed {
     text-decoration: line-through;
-    color: #6c757d;
-}
-
-/* Task due date text */
-small.task-time {
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    color: #000; /* Black text */
-}
-
-/* Footer */
-footer {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #777;
-}
-
-footer a {
-    color: #0078d4;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-footer a:hover {
-    text-decoration: underline;
+    color: gray;
 }
