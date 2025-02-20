@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-const completedTasks = new Set();
-const notificationTimers = new Map(); // Store timeout references
+const completedTasks = new Set(); // Tracks completed tasks
+const notificationTimers = new Map(); // Tracks notification timers
 let notificationSound = new Audio('https://www.fesliyanstudios.com/play-mp3/4386');
-notificationSound.preload = "auto"; // Preload sound but do not play
+notificationSound.preload = "auto"; // Preload sound but don't play automatically
 
 document.getElementById('taskForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -19,11 +19,8 @@ document.getElementById('taskForm').addEventListener('submit', function (e) {
     const dueDate = new Date(dueDateInput.value);
 
     if (taskDescription && dueDateInput.value) {
-        const task = {
-            id: Date.now(),
-            description: taskDescription,
-            dueDate: dueDate
-        };
+        const taskId = Date.now();
+        const task = { id: taskId, description: taskDescription, dueDate: dueDate };
 
         addTaskToList(task);
         scheduleNotification(task);
@@ -53,7 +50,7 @@ function markAsComplete(taskId) {
         taskItem.classList.add('completed');
         completedTasks.add(taskId); // Mark as completed
 
-        // 🔥 **Cancel notification & sound if marked as complete**
+        // 🛑 **Cancel any pending notification & sound**
         if (notificationTimers.has(taskId)) {
             clearTimeout(notificationTimers.get(taskId));
             notificationTimers.delete(taskId);
@@ -65,9 +62,9 @@ function deleteTask(taskId) {
     const taskItem = document.querySelector(`[data-id="${taskId}"]`);
     if (taskItem) {
         taskItem.remove();
-        completedTasks.delete(taskId);
+        completedTasks.add(taskId); // Treat as completed since it's deleted
 
-        // 🔥 **Cancel notification & sound if task is deleted**
+        // 🛑 **Cancel notification & sound immediately**
         if (notificationTimers.has(taskId)) {
             clearTimeout(notificationTimers.get(taskId));
             notificationTimers.delete(taskId);
@@ -80,7 +77,7 @@ function scheduleNotification(task) {
 
     if (timeUntilDue > 0) {
         const timer = setTimeout(() => {
-            // 🔥 **Final check before playing sound**
+            // 🔥 **Final check before playing sound or sending notification**
             if (!completedTasks.has(task.id)) { 
                 playNotificationSound();
                 new Notification("Task Reminder", {
@@ -90,7 +87,7 @@ function scheduleNotification(task) {
             }
         }, timeUntilDue);
 
-        // **Store the timeout reference to allow cancellation**
+        // **Store timeout reference to cancel later**
         notificationTimers.set(task.id, timer);
     }
 }
